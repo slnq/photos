@@ -40,20 +40,21 @@ fn generate_html(filename: &str) -> String {
         <meta property="og:title" content="📷" />
         <meta property="og:description" content="📸" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="サイトURL" />
-        <meta property="og:image" content="サムネイル画像のURL" />
-        <meta property="og:site_name" content="サイト名" />
+        <meta property="og:url" content="https://slnq.github.io/photos/{}.html" />
+        <meta property="og:image" content="https://slnq.github.io/photos/imgs/{}" />
+        <meta property="og:site_name" content="📸" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="📷" />
         <meta name="twitter:description" content="📸" />
-        <meta name="twitter:image" content="サムネイル画像のURL" />
+        <meta name="twitter:image" content="https://slnq.github.io/photos/imgs/{}" />
+        <link href="./imgs/f.ico" rel="icon">
         </head><body class="bdy"><img src="./imgs/{}" class="blur1"/><img src="./imgs/{}" class="photo1"/></body></html>"#,
-        filename, filename
+        filename, filename, filename, filename, filename
     )
 }
 
 fn generate_index_html(image_files: &[String]) -> String {
-    let mut html = String::from("<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"main.css\"></head><body><div class=\"container\">");
+    let mut html = String::from("<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"main.css\"><link href=\"./imgs/f.ico\" rel=\"icon\"></head><body><div class=\"container\">");
     for filename in image_files {
         html.push_str(&format!(
             r#"<a href="./{}.html"><img src="./imgs/{}" class="blur"/><img src="./imgs/{}" class="photo"/></a>"#,
@@ -75,7 +76,7 @@ fn create_html_files(img_dir: &str, output_dir: &str) -> io::Result<Vec<String>>
         let entry = entry?;
         if let Some(filename) = entry.file_name().to_str() {
             // Exclude main.css file
-            if filename == "main.css" {
+            if filename == "main.css" || filename == "f.ico" {
                 continue;
             }
 
