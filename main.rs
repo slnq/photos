@@ -57,25 +57,36 @@ fn generate_index_html(image_files: &[String], a1: u32, a2: u32) -> String {
     let mut html = String::from("<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"main.css\"><link href=\"./imgs/f.ico\" rel=\"icon\"></head><body><div class=\"container\">");
     let mut i = 0;
 	for filename in image_files {
-		if i == a1-1 || i == a1 + a2-1 ||  i == (image_files.len()-1).try_into().unwrap() {
+		if i < a1-1 {
 			html.push_str(&format!(
-				r#"<a href="./{}.html" id="lst"><img src="./imgs/{}" class="photo"/></a>"#,
-				filename.split('.').next().unwrap(), filename
+				r#"<img src="./imgs/{}" class="d1"/>"#,
+				 filename
+			));
+		} else if i == a1-1 {
+			html.push_str(&format!(
+				r#"<img src="./imgs/{}" class="d1" id="lst"/>"#,
+				 filename
+			));
+		}
+		else if i == a1 + a2-1 ||  i == (image_files.len()-1).try_into().unwrap() {
+			html.push_str(&format!(
+				r#"<img src="./imgs/{}" class="photo" id="lst"/>"#,
+				 filename
 			));
 			} else {
 		html.push_str(&format!(
-			r#"<a href="./{}.html"><img src="./imgs/{}" class="photo"/></a>"#,
-            filename.split('.').next().unwrap(), filename
+			r#"<img src="./imgs/{}" class="photo"/>"#,
+             filename
         ));
 		}
 		i+=1;
 		if i == a1 {
-			html.push_str("</div><div class=\"container\">");
+			html.push_str("</br>");
 		} else if i == a1 + a2 {
-			html.push_str("</div><div class=\"container\" id=\"last\">");
+			html.push_str("</br>");
 		} 
     }
-    html.push_str("</div><script>window.addEventListener('wheel', function(event) {    event.preventDefault();        const containers = document.querySelectorAll('.container');    containers.forEach(container => {        const start = container.scrollLeft;        const end = start + event.deltaY * 6;        const duration = 100;        let startTime = null;                function animateScroll(timestamp) {            if (!startTime) startTime = timestamp;            const elapsed = timestamp - startTime;            const progress = Math.min(elapsed / duration, 1);            container.scrollLeft = start + (end - start) * easeInOutQuad(progress);                        if (progress < 1) {                requestAnimationFrame(animateScroll);            }        }                function easeInOutQuad(t) {            return t < 0.5                ? 2 * t * t                : -1 + (4 - 2 * t) * t;        }                requestAnimationFrame(animateScroll);    });}, { passive: false });</script></body></html>");
+    html.push_str("</div><script src=\"https://cdn.jsdelivr.net/npm/exif-js\"></script><div id=\"lightbox\">    <img id=\"lightboxImg\">    <div id=\"caption\"></div></div><script>window.onload = function() {    var images = document.querySelectorAll('.container img');    images.forEach(function(img) {        img.addEventListener('click', function() {            openLightbox(img);         });    });    var lightbox = document.getElementById('lightbox');    var lightboxImg = document.getElementById('lightboxImg');    lightbox.addEventListener('click', function(e) {        if (e.target !== lightboxImg) {            closeLightbox();         }    });    lightboxImg.addEventListener('click', function() {        var src = lightboxImg.src;        var filename = src.split('/').pop();         var basename = filename.split('.').slice(0, -1).join('.');         window.location.href = basename + \".html\";     });};function openLightbox(element) {    var lightbox = document.getElementById('lightbox');    var lightboxImg = document.getElementById('lightboxImg');    var caption = document.getElementById('caption');    lightboxImg.src = element.src;      caption.innerHTML = element.alt;      EXIF.getData(element, function() {        var userComment = EXIF.getTag(this, 'UserComment');        if (userComment) {            var trimmedComment = userComment.slice(8);             var decodedComment = decodeUserComment(trimmedComment);            caption.innerHTML += decodedComment;        }    });    lightbox.style.display = \"flex\";  lightbox.style.flexDirection = \"column\";  }function closeLightbox() {    var lightbox = document.getElementById('lightbox');    lightbox.style.display = \"none\";  }function decodeUserComment(userComment) {    var uint8Array = new Uint8Array(userComment);    var decoder = new TextDecoder('utf-16le');    return decoder.decode(uint8Array);}</script></body></html>");
     html
 }
 
