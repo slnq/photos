@@ -1,13 +1,12 @@
-<html><head><link rel="stylesheet" type="text/css" href="main.css">
+<html><head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="each.css">
         <meta property="og:title" content="📷" />
         <meta property="og:description" content="📸" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://slnq.github.io/photos/20240126.jpg.html" />
+        <meta property="og:url" content="https://slnq.github.io/photos/20240126.html" />
         <meta property="og:image" content="https://slnq.github.io/photos/imgs/20240126.jpg" />
         <meta property="og:site_name" content="📸" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="📷" />
-        <meta name="twitter:description" content="📸" />
-        <meta name="twitter:image" content="https://slnq.github.io/photos/imgs/20240126.jpg" />
-        <link href="./imgs/f.ico" rel="icon">
-        </head><body class="bdy"><img src="./imgs/20240126.jpg" class="photo1"/></body></html>
+        <meta name="twitter:title" content="📷" /><meta name="twitter:description" content="📸" /><meta name="twitter:image" content="https://slnq.github.io/photos/imgs/20240126.jpg" /><link href="./imgs/f.ico" rel="icon"></head><body class="bdy"><img src="./imgs/20240126.jpg" class="photo1"/></body></html><div id="caption"></div><script src="https://cdn.rawgit.com/exif-js/exif-js/master/exif.js"></script><script>	window.onload = function() {	  var element = document.getElementsByClassName('photo1')[0];	  var caption = document.getElementById('caption');	  if (element) {		EXIF.getData(element, function() {		  var userComment = EXIF.getTag(this, 'UserComment');		  if (userComment) {			var trimmedComment = userComment.slice(8);			var decodedComment = decodeUserComment(trimmedComment);			caption.innerHTML += decodedComment;		  }		});	  } else {		console.error('Class "photo1" not found');	  }	};	function decodeUserComment(comment) {	  try {		var decoder = new TextDecoder('utf-16le');		return decoder.decode(new Uint8Array(comment));	  } catch (e) {		console.error('Failed to decode UserComment', e);		return comment;	  }	}  </script>
+		

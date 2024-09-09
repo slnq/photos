@@ -17,9 +17,6 @@ body {
   display: none;
 }
 
-a {
-}
-
 img {
 	display: inline-block;
 	margin-right: 1svh;
@@ -44,20 +41,18 @@ img {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(69, 67, 81, 0.9);
 }
 
 #lightboxImg {
     display: block;
 	margin: auto;
-    margin-top: 10vh;
+    margin-top: 10svmin;
 	margin-bottom: 0;
-    max-width: 90%;
-    max-height: 80%;
-	height: 70vh;
+	height: 70svmin;
 }
 
 #caption {
     text-align: center;
-    color: white;
+    color: #DCDCE0;
 }
