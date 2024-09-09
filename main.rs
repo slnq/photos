@@ -36,7 +36,9 @@ fn copy_images(source_dir: &str, destination_dir: &str) -> io::Result<()> {
 
 fn generate_html(filename: &str) -> String {
     format!(
-        r#"<html><head><link rel="stylesheet" type="text/css" href="main.css">
+        r#"<html><head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="each.css">
         <meta property="og:title" content="📷" />
         <meta property="og:description" content="📸" />
         <meta property="og:type" content="website" />
@@ -44,12 +46,9 @@ fn generate_html(filename: &str) -> String {
         <meta property="og:image" content="https://slnq.github.io/photos/imgs/{}" />
         <meta property="og:site_name" content="📸" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="📷" />
-        <meta name="twitter:description" content="📸" />
-        <meta name="twitter:image" content="https://slnq.github.io/photos/imgs/{}" />
-        <link href="./imgs/f.ico" rel="icon">
-        </head><body class="bdy"><img src="./imgs/{}" class="photo1"/></body></html>"#,
-        filename, filename, filename, filename
+        <meta name="twitter:title" content="📷" /><meta name="twitter:description" content="📸" /><meta name="twitter:image" content="https://slnq.github.io/photos/imgs/{}" /><link href="./imgs/f.ico" rel="icon"></head><body class="bdy"><img src="./imgs/{}" class="photo1"/></body></html><div id="caption"></div><script src="https://cdn.rawgit.com/exif-js/exif-js/master/exif.js"></script><script>	window.onload = function() {{	  var element = document.getElementsByClassName('photo1')[0];	  var caption = document.getElementById('caption');	  if (element) {{		EXIF.getData(element, function() {{		  var userComment = EXIF.getTag(this, 'UserComment');		  if (userComment) {{			var trimmedComment = userComment.slice(8);			var decodedComment = decodeUserComment(trimmedComment);			caption.innerHTML += decodedComment;		  }}		}});	  }} else {{		console.error('Class "photo1" not found');	  }}	}};	function decodeUserComment(comment) {{	  try {{		var decoder = new TextDecoder('utf-16le');		return decoder.decode(new Uint8Array(comment));	  }} catch (e) {{		console.error('Failed to decode UserComment', e);		return comment;	  }}	}}  </script>
+		"#,
+        filename.split('.').next().unwrap(), filename, filename, filename
     )
 }
 
@@ -106,7 +105,7 @@ fn create_html_files(img_dir: &str, output_dir: &str, a1: &mut u32, a2: &mut u32
     for entry in entries {
 		let entry = entry?;
         if let Some(filename) = entry.file_name().to_str() {
-			if filename == "main.css" || filename == "f.ico" {
+			if filename == "main.css" ||filename == "each.css"|| filename == "f.ico" {
 				continue;
             }
 			
@@ -177,6 +176,7 @@ fn main() -> std::io::Result<()> {
 
     // Copy main.css from imgs directory to public directory
     copy_file("imgs/main.css", output_dir)?;
+    copy_file("imgs/each.css", output_dir)?;
 
     // Create HTML files for each image
     let image_files = create_html_files(img_dir, output_dir, &mut a1, &mut a2)?;
