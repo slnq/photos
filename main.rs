@@ -54,7 +54,8 @@ fn generate_html(filename: &str) -> String {
 
 fn generate_index_html(image_files: &[String], a1: u32, a2: u32) -> String {
     let mut html = String::from("<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"main.css\"><link href=\"./imgs/f.ico\" rel=\"icon\"></head><body><div class=\"container\">");
-    let mut i = 0;
+    html.push_str("<a href='../'><img src='./imgs/head.svg' class='d1'></a>");
+	let mut i = 0;
 	for filename in image_files {
 		if i < a1-1 {
 			html.push_str(&format!(
@@ -85,7 +86,7 @@ fn generate_index_html(image_files: &[String], a1: u32, a2: u32) -> String {
 			html.push_str("</br>");
 		} 
     }
-    html.push_str("</div><script src=\"https://cdn.jsdelivr.net/npm/exif-js\"></script><div id=\"lightbox\">    <img id=\"lightboxImg\">    <div id=\"caption\"></div></div><script>window.onload = function() {    var images = document.querySelectorAll('.container img');    images.forEach(function(img) {        img.addEventListener('click', function() {            openLightbox(img);         });    });    var lightbox = document.getElementById('lightbox');    var lightboxImg = document.getElementById('lightboxImg');    lightbox.addEventListener('click', function(e) {        if (e.target !== lightboxImg) {            closeLightbox();         }    });    lightboxImg.addEventListener('click', function() {        var src = lightboxImg.src;        var filename = src.split('/').pop();         var basename = filename.split('.').slice(0, -1).join('.');         window.location.href = basename + \".html\";     });};function openLightbox(element) {    var lightbox = document.getElementById('lightbox');    var lightboxImg = document.getElementById('lightboxImg');    var caption = document.getElementById('caption');    lightboxImg.src = element.src;      caption.innerHTML = element.alt;      EXIF.getData(element, function() {        var userComment = EXIF.getTag(this, 'UserComment');        if (userComment) {            var trimmedComment = userComment.slice(8);             var decodedComment = decodeUserComment(trimmedComment);            caption.innerHTML += decodedComment;        }    });    lightbox.style.display = \"flex\";  lightbox.style.flexDirection = \"column\";  }function closeLightbox() {    var lightbox = document.getElementById('lightbox');    lightbox.style.display = \"none\";  }function decodeUserComment(userComment) {    var uint8Array = new Uint8Array(userComment);    var decoder = new TextDecoder('utf-16le');    return decoder.decode(uint8Array);}</script></body></html>");
+    html.push_str("</div><script src=\"https://cdn.jsdelivr.net/npm/exif-js\"></script><div id=\"lightbox\">    <img id=\"lightboxImg\">    <div id=\"caption\"></div></div><script>window.onload = function() {    var images = document.querySelectorAll('.container img');    images = Array.from(images).slice(1);  images.forEach(function(img) {        img.addEventListener('click', function() {            openLightbox(img);         });    });    var lightbox = document.getElementById('lightbox');    var lightboxImg = document.getElementById('lightboxImg');    lightbox.addEventListener('click', function(e) {        if (e.target !== lightboxImg) {            closeLightbox();         }    });    lightboxImg.addEventListener('click', function() {        var src = lightboxImg.src;        var filename = src.split('/').pop();         var basename = filename.split('.').slice(0, -1).join('.');         window.location.href = basename + \".html\";     });};function openLightbox(element) {    var lightbox = document.getElementById('lightbox');    var lightboxImg = document.getElementById('lightboxImg');    var caption = document.getElementById('caption');    lightboxImg.src = element.src;      caption.innerHTML = element.alt;      EXIF.getData(element, function() {        var userComment = EXIF.getTag(this, 'UserComment');        if (userComment) {            var trimmedComment = userComment.slice(8);             var decodedComment = decodeUserComment(trimmedComment);            caption.innerHTML += decodedComment;        }    });    lightbox.style.display = \"flex\";  lightbox.style.flexDirection = \"column\";  }function closeLightbox() {    var lightbox = document.getElementById('lightbox');    lightbox.style.display = \"none\";  }function decodeUserComment(userComment) {    var uint8Array = new Uint8Array(userComment);    var decoder = new TextDecoder('utf-16le');    return decoder.decode(uint8Array);}</script></body></html>");
     html
 }
 
@@ -97,7 +98,7 @@ fn create_html_files(img_dir: &str, output_dir: &str, a1: &mut u32, a2: &mut u32
     entries.reverse();
 	
 	let mut que: Vec<Vec<_>> = vec![Vec::new(), Vec::new(), Vec::new()];
-	let mut que_w: Vec<u32> = vec![0, 0, 0];
+	let mut que_w: Vec<u32> = vec![215, 0, 0];
 	let mut i = 0;
 	let margin = 15;
 	let height = 400;
@@ -105,7 +106,7 @@ fn create_html_files(img_dir: &str, output_dir: &str, a1: &mut u32, a2: &mut u32
     for entry in entries {
 		let entry = entry?;
         if let Some(filename) = entry.file_name().to_str() {
-			if filename == "main.css" ||filename == "each.css"|| filename == "f.ico" {
+			if filename == "main.css" ||filename == "each.css"|| filename == "f.ico"|| filename == "head.svg" {
 				continue;
             }
 			
