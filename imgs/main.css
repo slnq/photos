@@ -1,5 +1,6 @@
 body {
 	margin: 0;
+	background-color: #454351;
 }
 
 .container {
@@ -20,8 +21,9 @@ body {
 img {
 	display: inline-block;
 	margin-right: 1svh;
-	height: 32svh;
+	height: calc(32svh - 4px);
 	margin-top: 1svh;
+	border: solid 2px #DCDCE0;
 }
 
 .d1 {
