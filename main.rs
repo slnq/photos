@@ -99,7 +99,7 @@ fn create_html_files(img_dir: &str, output_dir: &str, a1: &mut u32, a2: &mut u32
     entries.reverse();
 	
 	let mut que: Vec<Vec<_>> = vec![Vec::new(), Vec::new(), Vec::new()];
-	let mut que_w: Vec<u32> = vec![215, 0, 0];
+	let mut que_w: Vec<u32> = vec![0, 0, 0];
 	let mut i = 0;
 	let margin = 15;
 	let height = 400;

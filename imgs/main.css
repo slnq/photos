@@ -1,17 +1,19 @@
 body {
 	margin: 0;
 	background-color: #454351;
+	overflow-y: hidden;
 }
 
 .container {
     white-space: nowrap;
-    height: 98svh;
+    height: calc(98sch - 1px);
     overflow: scroll;
 	margin-top: 1svh;
 	margin-left: 1svh;
 	margin-right: 1svh;
 	margin-bottom: 1svh;
 	overflow-y: hidden;
+	scrollbar-width: none;
 }
 
 .container::-webkit-scrollbar{
