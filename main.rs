@@ -37,8 +37,8 @@ fn copy_images(source_dir: &str, destination_dir: &str) -> io::Result<()> {
 fn generate_html(filename: &str) -> String {
     format!(
         r#"<html><head>
-		<meta charset="UTF-8">
-		<link rel="stylesheet" type="text/css" href="each.css">
+        <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="each.css">
         <meta property="og:title" content="📷" />
         <meta property="og:description" content="📸" />
         <meta property="og:type" content="website" />
@@ -46,11 +46,68 @@ fn generate_html(filename: &str) -> String {
         <meta property="og:image" content="https://slnq.github.io/photos/imgs/{}" />
         <meta property="og:site_name" content="📸" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="📷" /><meta name="twitter:description" content="📸" /><meta name="twitter:image" content="https://slnq.github.io/photos/imgs/{}" /><link href="./imgs/f.ico" rel="icon"></head><body class="bdy"><img src="./imgs/{}" class="photo1"/></body></html><div id="caption"></div><script src="https://cdn.rawgit.com/exif-js/exif-js/master/exif.js"></script><script>	window.onload = function() {{	  var element = document.getElementsByClassName('photo1')[0];	  var caption = document.getElementById('caption');	  if (element) {{		EXIF.getData(element, function() {{		  var userComment = EXIF.getTag(this, 'UserComment');		  if (userComment) {{			var trimmedComment = userComment.slice(8);			var decodedComment = decodeUserComment(trimmedComment);			caption.innerHTML += decodedComment;		  }}		}});	  }} else {{			  }}	}};	function decodeUserComment(comment) {{	  try {{		var decoder = new TextDecoder('utf-16le');		return decoder.decode(new Uint8Array(comment));	  }} catch (e) {{				return comment;	  }}	}}  </script>
-		"#,
+        <meta name="twitter:title" content="📷" />
+        <meta name="twitter:description" content="📸" />
+        <meta name="twitter:image" content="https://slnq.github.io/photos/imgs/{}" />
+        <link href="./imgs/f.ico" rel="icon"></head>
+        <body class="bdy">
+		<a href=".."><div style="text-align: center;color: #DCDCE0;font-family: serif;font-size: 2.2rem;margin-top: 0.5rem;">夏果</div></a>
+        <img src="./imgs/{}" class="photo1"/>
+        <div id="caption"></div>
+        <script src="https://cdn.rawgit.com/exif-js/exif-js/master/exif.js"></script>
+        <script>
+            window.onload = function() {{
+                var element = document.getElementsByClassName('photo1')[0];
+                var caption = document.getElementById('caption');
+                if (element) {{
+                    var src = element.src;
+                    var fileExtension = src.split('.').pop().toLowerCase();
+                    if (fileExtension === 'jpeg' || fileExtension === 'jpg') {{
+                        EXIF.getData(element, function() {{
+                            var userComment = EXIF.getTag(this, 'UserComment');
+                            if (userComment) {{
+                                var trimmedComment = userComment.slice(8);
+                                var decodedComment = decodeUserComment(trimmedComment);
+                                caption.innerHTML += decodedComment;
+                            }}
+                        }});
+                    }} else if (fileExtension === 'webp') {{
+                        fetch(src)
+                            .then(response => response.arrayBuffer())
+                            .then(buffer => parseXmpMetadata(new Uint8Array(buffer)))
+                            .then(xmpData => {{
+                                var description = extractDescription(xmpData);
+                                if (description) {{
+                                    caption.innerHTML += description;
+                                }}
+                            }})
+                            .catch(error => console.error('Error fetching WebP metadata:', error));
+                    }}
+                }}
+            }};
+            function decodeUserComment(comment) {{
+                try {{
+                    var decoder = new TextDecoder('utf-16le');
+                    return decoder.decode(new Uint8Array(comment));
+                }} catch (e) {{
+                    return comment;
+                }}
+            }}
+            function parseXmpMetadata(uint8Array) {{
+                var decoder = new TextDecoder('utf-8');
+                var xmpString = decoder.decode(uint8Array);
+                return xmpString;
+            }}
+            function extractDescription(xmpData) {{
+                var descriptionMatch = xmpData.match(/<dc:description>(.*?)<\/dc:description>/);
+                return descriptionMatch ? descriptionMatch[1] : '';
+            }}
+        </script>
+        </body></html>"#,
         filename.split('.').next().unwrap(), filename, filename, filename
     )
 }
+
 
 fn generate_index_html(image_files: &[String], a1: u32, a2: u32) -> String {
     let mut html = String::from("<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"main.css\"><link href=\"./imgs/f.ico\" rel=\"icon\"></head><body><div class=\"container\">");
