@@ -49,9 +49,10 @@ fn generate_html(filename: &str) -> String {
         <meta name="twitter:title" content="📷" />
         <meta name="twitter:description" content="📸" />
         <meta name="twitter:image" content="https://slnq.github.io/photos/imgs/{}" />
-        <link href="./imgs/f.ico" rel="icon"></head>
+        <meta name="viewport" content="width=device-width,initial-scale=0.8">
+		<link href="./imgs/f.ico" rel="icon"></head>
         <body class="bdy">
-		<a href=".."><div style="text-align: center;color: #DCDCE0;font-family: serif;font-size: 2.2rem;margin-top: 0.5rem;">夏果</div></a>
+		<a href="https://slnq.github.io/photos/index.html"><div style="text-align: center;color: #DCDCE0;font-family: serif;font-size: 2.2rem;margin-top: 0.5rem;">夏果</div></a>
         <img src="./imgs/{}" class="photo1"/>
         <div id="caption"></div>
         <script src="https://cdn.rawgit.com/exif-js/exif-js/master/exif.js"></script>
@@ -110,7 +111,7 @@ fn generate_html(filename: &str) -> String {
 
 
 fn generate_index_html(image_files: &[String], a1: u32, a2: u32) -> String {
-    let mut html = String::from("<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"main.css\"><link href=\"./imgs/f.ico\" rel=\"icon\"></head><body><div class=\"container\">");
+    let mut html = String::from("<html><head><meta name=\"viewport\" content=\"width=device-width,initial-scale=0.8\"><link rel=\"stylesheet\" type=\"text/css\" href=\"main.css\"><link href=\"./imgs/f.ico\" rel=\"icon\"></head><body><div class=\"container\">");
     html.push_str("<a href='../'><img src='./imgs/head.svg' class='d1'></a>");
 	let mut i = 0;
 	for filename in image_files {
