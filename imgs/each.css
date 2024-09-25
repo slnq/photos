@@ -3,6 +3,8 @@ html {
 	-webkit-text-size-adjust:100%;
 }
 
+a {text-decoration: none;}
+
 body{
 	background-color: rgba(69, 67, 81);
 	display: flex;
